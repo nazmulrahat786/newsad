@@ -8,31 +8,21 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <style>
     body {
-      background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #fad0c4, #fbc2eb);
+      background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+      animation: bgMove 15s ease infinite;
       background-size: 400% 400%;
-      animation: gradientBG 15s ease infinite;
     }
 
-    @keyframes gradientBG {
+    @keyframes bgMove {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
 
     .glass {
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(15px);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-      border-radius: 20px;
-      padding: 2rem;
-      width: 90%;
-      max-width: 400px;
-      animation: fadeIn 1.5s ease;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
     }
 
     .toast {
@@ -56,24 +46,23 @@
 
     input:focus {
       outline: none;
-      box-shadow: 0 0 0 2px #a78bfa;
+      box-shadow: 0 0 0 2px #38bdf8;
     }
   </style>
 </head>
-<body class="flex items-center justify-center min-h-screen text-white font-sans">
+<body class="flex items-center justify-center min-h-screen">
 
-  <div class="glass text-center">
-    <h2 class="text-4xl font-extrabold mb-4 animate-pulse">🔐 Admin Portal</h2>
-    <p class="mb-6 text-sm text-white/70">Secure Access Only</p>
+  <div class="glass p-8 rounded-2xl w-11/12 max-w-md text-white text-center">
+    <h2 class="text-3xl font-bold mb-6">🔐 Admin Login</h2>
     <input
       id="password"
       type="password"
       placeholder="Enter Password"
-      class="w-full p-3 rounded-lg text-black mb-6 focus:ring-2 focus:ring-purple-400 transition duration-300"
+      class="w-full p-3 rounded-lg text-black mb-6 transition duration-300"
     />
     <button
       onclick="login()"
-      class="w-full bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 hover:from-red-500 hover:to-purple-500 text-white p-3 rounded-full font-semibold transition-all duration-300 hover:scale-105 shadow-xl"
+      class="w-full bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-cyan-500 hover:to-blue-500 p-3 rounded-lg font-semibold transition-all duration-300 hover:scale-105 shadow-lg"
     >
       Login
     </button>
