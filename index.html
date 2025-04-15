@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Login</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #fad0c4, #fbc2eb);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .glass {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(15px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      border-radius: 20px;
+      padding: 2rem;
+      width: 90%;
+      max-width: 400px;
+      animation: fadeIn 1.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background-color: #1e293b;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 10px;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.3s ease;
+      z-index: 9999;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    input:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px #a78bfa;
+    }
+  </style>
+</head>
+<body class="flex items-center justify-center min-h-screen text-white font-sans">
+
+  <div class="glass text-center">
+    <h2 class="text-4xl font-extrabold mb-4 animate-pulse">🔐 Admin Portal</h2>
+    <p class="mb-6 text-sm text-white/70">Secure Access Only</p>
+    <input
+      id="password"
+      type="password"
+      placeholder="Enter Password"
+      class="w-full p-3 rounded-lg text-black mb-6 focus:ring-2 focus:ring-purple-400 transition duration-300"
+    />
+    <button
+      onclick="login()"
+      class="w-full bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 hover:from-red-500 hover:to-purple-500 text-white p-3 rounded-full font-semibold transition-all duration-300 hover:scale-105 shadow-xl"
+    >
+      Login
+    </button>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script>
+    const correctPassword = "Rahat2004786";
+
+    function showToast(message, success = false) {
+      const toast = document.getElementById("toast");
+      toast.innerText = message;
+      toast.style.backgroundColor = success ? "#10b981" : "#ef4444";
+      toast.classList.add("show");
+      setTimeout(() => {
+        toast.classList.remove("show");
+      }, 3000);
+    }
+
+    function login() {
+      const input = document.getElementById("password").value;
+      if (input === correctPassword) {
+        showToast("Login Successful! Redirecting...", true);
+        setTimeout(() => {
+          window.location.href = "admin.html";
+        }, 1500);
+      } else {
+        showToast("Incorrect password!");
+      }
+    }
+  </script>
+
+</body>
+</html>

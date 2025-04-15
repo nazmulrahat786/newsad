@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel - NewsSite</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@3.0.0/dist/full.css" rel="stylesheet" />
+  <style>
+    .sidebar { background-color: #1f2937; }
+    html { scroll-behavior: smooth; }
+  </style>
+</head>
+<body class="bg-gray-100">
+
+  <!-- Mobile Menu Toggle -->
+  <div class="md:hidden flex justify-between items-center p-4 bg-gray-800 text-white">
+    <h2 class="text-xl font-bold">🛠 Admin Panel</h2>
+    <button id="menu-toggle" class="text-white text-3xl focus:outline-none">☰</button>
+  </div>
+
+  <div class="flex flex-col md:flex-row min-h-screen">
+    <!-- Sidebar -->
+    <aside id="sidebar" class="sidebar w-full md:w-64 p-6 space-y-4 text-white hidden md:block">
+      <nav class="space-y-2">
+        <a href="#dashboard" class="block p-2 rounded hover:bg-gray-700">📊 Dashboard</a>
+        <a href="#manage-news" class="block p-2 rounded hover:bg-gray-700">📰 Manage News</a>
+        <a href="#manage-banners" class="block p-2 rounded hover:bg-gray-700">🖼 Manage Banners</a>
+        <a href="#breaking-news" class="block p-2 rounded hover:bg-gray-700">🚨 Breaking News</a>
+        <a href="#newsletter" class="block p-2 rounded hover:bg-gray-700">📧 Newsletter</a>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-4 md:p-8 overflow-y-auto">
+      <!-- Dashboard -->
+      <section id="dashboard" class="mb-12">
+        <h1 class="text-3xl font-bold mb-4">📊 Dashboard</h1>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="bg-white shadow rounded-lg p-6">
+            <h2 class="text-xl font-semibold">Total News</h2>
+            <p class="text-3xl mt-2" id="news-count">--</p>
+          </div>
+          <div class="bg-white shadow rounded-lg p-6">
+            <h2 class="text-xl font-semibold">Total Banners</h2>
+            <p class="text-3xl mt-2" id="banner-count">--</p>
+          </div>
+          <div class="bg-white shadow rounded-lg p-6">
+            <h2 class="text-xl font-semibold">Subscribers</h2>
+            <p class="text-3xl mt-2" id="subscriber-count">--</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Manage News -->
+      <section id="manage-news" class="mb-12">
+        <h1 class="text-3xl font-bold mb-4">📰 Manage News</h1>
+        <div class="bg-white shadow p-6 rounded-lg">
+          <form id="news-form" class="mb-6 flex flex-col gap-4">
+            <input type="text" id="news-title" class="input input-bordered w-full" placeholder="News Title" required />
+            <input type="text" id="news-content" class="input input-bordered w-full" placeholder="News Content" required />
+            <input type="text" id="news-image" class="input input-bordered w-full" placeholder="Image URL (optional)" />
+            <img id="preview-image" class="w-48 mt-2 hidden rounded shadow" />
+            <select id="news-category" class="select select-bordered w-full" required>
+              <option disabled selected>Select Category</option>
+              <option value="Politics">Politics</option>
+              <option value="Sports">Sports</option>
+              <option value="Technology">Technology</option>
+              <option value="Entertainment">Entertainment</option>
+              <option value="International">International</option>
+              <option value="Others">Others</option>
+            </select>
+            <button type="submit" class="btn btn-primary">Add News</button>
+          </form>
+          <div id="news-table">Loading news...</div>
+        </div>
+      </section>
+
+      <!-- Manage Banners -->
+      <section id="manage-banners" class="mb-12">
+        <h1 class="text-3xl font-bold mb-4">🖼 Manage Banners</h1>
+        <div class="bg-white shadow p-6 rounded-lg">
+          <form id="banner-form" class="mb-4 flex flex-col md:flex-row gap-4">
+            <input type="text" id="banner-url" class="input input-bordered w-full" placeholder="Banner Image URL" required />
+            <button type="submit" class="btn btn-primary">Add Banner</button>
+          </form>
+          <div id="banner-table">Loading banners...</div>
+        </div>
+      </section>
+
+      <!-- Breaking News -->
+      <section id="breaking-news" class="mb-12">
+        <h1 class="text-3xl font-bold mb-4">🚨 Breaking News</h1>
+        <div class="bg-white shadow p-6 rounded-lg">
+          <form id="breaking-news-form" class="flex flex-col md:flex-row gap-4 mb-4">
+            <input id="breaking-input" type="text" placeholder="Enter breaking news..." class="input input-bordered w-full" />
+            <button type="submit" class="btn btn-accent">Add</button>
+          </form>
+          <ul id="breaking-list" class="list-disc pl-6 text-lg"></ul>
+        </div>
+      </section>
+      <!-- Watch Now -->
+<section id="watch-now" class="mb-12">
+  <h1 class="text-3xl font-bold mb-4">🎥 Watch Now Video</h1>
+  <div class="bg-white shadow p-6 rounded-lg">
+    <form id="watch-form" class="flex flex-col md:flex-row gap-4">
+      <input type="text" id="video-url" class="input input-bordered w-full" placeholder="Enter YouTube Video URL" required />
+      <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+    <div id="video-preview" class="mt-4 hidden">
+      <p class="font-semibold mb-2">Preview:</p>
+      <iframe id="video-frame" width="560" height="315" class="rounded shadow" allowfullscreen></iframe>
+    </div>
+  </div>
+</section>
+
+
+      <!-- Newsletter -->
+      <section id="newsletter">
+        <h1 class="text-3xl font-bold mb-4">📧 Newsletter Subscribers</h1>
+        <div class="bg-white shadow p-6 rounded-lg">
+          <div id="subscriber-list">Loading subscribers...</div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Firebase + Script -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.19.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.19.0/firebase-analytics.js";
+    import { getDatabase, ref, get, set, remove, push, onValue } from "https://www.gstatic.com/firebasejs/9.19.0/firebase-database.js";
+  
+    const firebaseConfig = {
+      apiKey: "AIzaSyCEXhDRVjiZquG98fRjw03MiMEgYRZrCJE",
+      authDomain: "news786-5b80b.firebaseapp.com",
+      databaseURL: "https://news786-5b80b-default-rtdb.firebaseio.com",
+      projectId: "news786-5b80b",
+      storageBucket: "news786-5b80b.appspot.com",
+      messagingSenderId: "592218049162",
+      appId: "1:592218049162:web:132e739f34b05da5e93b73",
+      measurementId: "G-668CSG2M9G"
+    };
+  
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const db = getDatabase(app);
+  
+    // Dashboard Counts
+    async function loadDashboard() {
+      const [newsSnap, bannersSnap, subsSnap] = await Promise.all([
+        get(ref(db, 'news')),
+        get(ref(db, 'banners')),
+        get(ref(db, 'newsletter'))
+      ]);
+      document.getElementById('news-count').textContent = newsSnap.exists() ? Object.keys(newsSnap.val()).length : 0;
+      document.getElementById('banner-count').textContent = bannersSnap.exists() ? Object.keys(bannersSnap.val()).length : 0;
+      document.getElementById('subscriber-count').textContent = subsSnap.exists() ? Object.keys(subsSnap.val()).length : 0;
+    }
+  
+    // Add News
+    document.getElementById('news-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const title = document.getElementById("news-title").value.trim();
+      const content = document.getElementById("news-content").value.trim();
+      const image = document.getElementById("news-image").value.trim();
+      const category = document.getElementById("news-category").value;
+      if (!title || !content || !category || category === "Select Category") return alert("Fill all fields!");
+  
+      await push(ref(db, 'news'), { title, content, image, category });
+      document.getElementById("news-form").reset();
+      document.getElementById("preview-image").classList.add("hidden");
+    });
+  
+    // Live image preview
+    document.getElementById("news-image").addEventListener("input", (e) => {
+      const url = e.target.value.trim();
+      const preview = document.getElementById("preview-image");
+      if (url) {
+        preview.src = url;
+        preview.classList.remove("hidden");
+      } else {
+        preview.classList.add("hidden");
+      }
+    });
+  
+    // Load News Table
+    const newsRef = ref(db, 'news');
+    onValue(newsRef, (snapshot) => {
+      const data = snapshot.val();
+      const table = document.getElementById('news-table');
+      if (!data) return table.innerHTML = 'No news found.';
+      table.innerHTML = `<table class="table w-full"><thead><tr><th>Title</th><th>Category</th><th>Actions</th></tr></thead><tbody>` +
+        Object.entries(data).map(([id, news]) => `
+          <tr>
+            <td>${news.title}</td>
+            <td>${news.category}</td>
+            <td>
+              <button class="btn btn-sm btn-info" onclick="editNews('${id}', '${news.title}', '${news.content}', '${news.image}', '${news.category}')">Edit</button>
+              <button class="btn btn-sm btn-error" onclick="deleteNews('${id}')">Delete</button>
+            </td>
+          </tr>
+        `).join('') + `</tbody></table>`;
+    });
+  
+    window.editNews = (id, title, content, image, category) => {
+      const newTitle = prompt("Edit Title:", title);
+      const newContent = prompt("Edit Content:", content);
+      const newImage = prompt("Edit Image URL:", image);
+      const newCategory = prompt("Edit Category:", category);
+      if (newTitle && newContent && newCategory) {
+        set(ref(db, 'news/' + id), { title: newTitle, content: newContent, image: newImage, category: newCategory });
+      }
+    };
+  
+    window.deleteNews = (id) => {
+      if (confirm("Delete this news?")) remove(ref(db, 'news/' + id));
+    };
+  
+    // Add Banner
+    document.getElementById('banner-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const url = document.getElementById('banner-url').value.trim();
+      if (url) {
+        await push(ref(db, 'banners'), { url });
+        e.target.reset();
+      }
+    });
+  
+    // Load Banners with Edit/Delete
+        // Load Banners with Edit/Delete
+        const bannersRef = ref(db, 'banners');
+    onValue(bannersRef, (snapshot) => {
+      const data = snapshot.val();
+      const table = document.getElementById('banner-table');
+      if (!data) return table.innerHTML = 'No banners found.';
+      table.innerHTML = `<table class="table w-full"><thead><tr><th>Banner Image</th><th>Actions</th></tr></thead><tbody>` +
+        Object.entries(data).map(([id, banner]) => `
+          <tr>
+            <td><img src="${banner.url}" alt="Banner" class="w-48 rounded shadow" /></td>
+            <td>
+              <button class="btn btn-sm btn-info" onclick="editBanner('${id}', '${banner.url}')">Edit</button>
+              <button class="btn btn-sm btn-error" onclick="deleteBanner('${id}')">Delete</button>
+            </td>
+          </tr>
+        `).join('') + `</tbody></table>`;
+    });
+
+    window.editBanner = (id, url) => {
+      const newUrl = prompt("Edit Banner Image URL:", url);
+      if (newUrl) {
+        set(ref(db, 'banners/' + id), { url: newUrl });
+      }
+    };
+
+    window.deleteBanner = (id) => {
+      if (confirm("Delete this banner?")) remove(ref(db, 'banners/' + id));
+    };
+
+    // Breaking News
+    document.getElementById('breaking-news-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const breakingText = document.getElementById("breaking-input").value.trim();
+      if (!breakingText) return alert("Please enter some breaking news!");
+      
+      await push(ref(db, 'breakingNews'), { text: breakingText });
+      document.getElementById("breaking-input").value = '';
+    });
+
+    const breakingNewsRef = ref(db, 'breakingNews');
+    onValue(breakingNewsRef, (snapshot) => {
+      const data = snapshot.val();
+      const list = document.getElementById('breaking-list');
+      if (!data) return list.innerHTML = 'No breaking news found.';
+      list.innerHTML = Object.values(data).map(item => `<li class="text-lg">${item.text}</li>`).join('');
+    });
+
+    // Newsletter Subscribers
+    const newsletterRef = ref(db, 'newsletter');
+    onValue(newsletterRef, (snapshot) => {
+      const data = snapshot.val();
+      const list = document.getElementById('subscriber-list');
+      if (!data) return list.innerHTML = 'No subscribers yet.';
+      list.innerHTML = Object.values(data).map(subscriber => `<p>${subscriber.email}</p>`).join('');
+    });
+
+    // Video Watch Now
+    document.getElementById('watch-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const videoUrl = document.getElementById("video-url").value.trim();
+      if (!videoUrl) return alert("Please enter a YouTube video URL.");
+      
+      const videoId = videoUrl.split("v=")[1];
+      if (!videoId) return alert("Invalid YouTube URL.");
+      
+      const iframe = document.getElementById("video-frame");
+      iframe.src = `https://www.youtube.com/embed/${videoId}`;
+      document.getElementById("video-preview").classList.remove("hidden");
+    });
+  
+    // Load Dashboard on page load
+    window.addEventListener('load', loadDashboard);
+  </script>
+
+</body>
+</html>
+
